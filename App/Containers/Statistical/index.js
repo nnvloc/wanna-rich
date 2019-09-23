@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
+import {
+  View, Text, Button, TextInput,
+} from 'react-native';
 
 export default class StatisticalPage extends Component {
   constructor(props) {
@@ -8,8 +10,7 @@ export default class StatisticalPage extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-      </View>
+      <View style={{ flex: 1 }} />
     );
   }
 }
@@ -20,7 +21,10 @@ const styles = {
     flex: 1,
   },
   button: {
-    padding: 10 20,
-    fontSize: 24
-  }
-}
+    paddingTop: 10,
+    paddingBototm: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    fontSize: 24,
+  },
+};

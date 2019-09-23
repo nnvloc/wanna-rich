@@ -1,4 +1,4 @@
-export const results = {
+export default {
   '20/07/2019': {
     value: [15, 18, 25, 32, 42, 52],
     extra: 10,
