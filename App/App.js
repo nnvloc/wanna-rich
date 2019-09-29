@@ -7,31 +7,42 @@
  */
 
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import store from './store';
-import AppContainer from './Routes';
-import results from './global';
+import Routes from './Routes';
+
+import { initResults } from './actions';
+
+import { getData } from './services';
+
+const mapStateToProps = (state) => ({
+  results: state.results,
+});
+
+const mapDispatchToProps = {
+  initResults,
+}
+
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)((props) => {
+  getData()
+    .then(results => {
+      if (results) {
+        const parsedResults = Object.keys(results).map((key) => ({
+          date: key,
+          value: results[key].value,
+          extra: results[key].extra,
+        }));
+      
+        props.initResults(parsedResults);
+      }
+    })
+    .catch(err => console.log('err: ', err));
+  
+
+  return <Routes />
+});
 
 const App = () => {
-  global.results = Object.keys(results).map((key) => ({
-    date: key,
-    value: results[key].value,
-    extra: results[key].extra,
-  }));
-
-  global.addResult = (obj) => {
-    if (!obj.result || obj.date) {
-      return 'Bad request';
-    }
-
-    global.results[obj.date] = {
-      date: obj.date,
-      value: obj.result,
-      extra: obj.extra,
-    };
-    return global.results;
-  };
-
   return (
     <Provider store={store}>
       <AppContainer />

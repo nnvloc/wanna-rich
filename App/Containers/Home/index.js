@@ -1,38 +1,31 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  View, Text, Button, TextInput, Form, StyleSheet,
+  View, Text, TouchableHighlight, TextInput, Form, StyleSheet,
 } from 'react-native';
 import { Formik } from 'formik';
 import FormSchema from './validation';
+
+import globalStyles from '../../styles';
+import { insertResult } from '../../services';
+import { addResult, addResultSuccess, addResultFail } from '../../actions';
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
 
-    this.initialValues = { result: '', date: '' };
+    this.initialValues = { result: '', date: '', extra: '' };
   }
 
   addResult = (result) => {
-    console.log('add result: ', result);
+    this.props.addResult(result);
+    console.log('result: ', result);
   }
 
-  formValidate = (values) => {
-    const errors = {};
-    if (!values.email) {
-      errors.email = 'Required';
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-    ) {
-      errors.email = 'Invalid email address';
-    }
-    return errors;
-  };
-
   onSubmit = (values, { setSubmitting }) => {
-    const { result, date } = values;
-    global.addResult({ result, date });
-    this.initialValues = { result: '', date: '' };
+    const { result, date, extra } = values;
+    this.addResult({ result, date, extra });
+    this.initialValues = { result: '', date: '', extra: '' };
   };
 
   render() {
@@ -53,7 +46,19 @@ class HomePage extends Component {
           }) => (
             <View>
               <View>
-                <Text>Enter result</Text>
+                <Text>Enter date: </Text>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={handleChange('date')}
+                  onBlur={handleBlur('date')}
+                  value={values.date}
+                  placeholder="DD/MM/YYYY"
+                />
+                {errors.date && touched.date ? (<Text style={styles.error}>{errors.date}</Text>) : null}
+              </View>
+
+              <View>
+                <Text>Enter result: </Text>
                 <TextInput
                   style={styles.textInput}
                   onChangeText={handleChange('result')}
@@ -64,16 +69,17 @@ class HomePage extends Component {
               </View>
 
               <View>
-                <Text>Enter date</Text>
+                <Text>Enter extra number: </Text>
                 <TextInput
                   style={styles.textInput}
-                  onChangeText={handleChange('date')}
-                  onBlur={handleBlur('date')}
-                  value={values.date}
+                  onChangeText={handleChange('extra')}
+                  onBlur={handleBlur('result')}
+                  value={values.extra}
                 />
-                {errors.date && touched.date ? (<Text style={styles.error}>{errors.date}</Text>) : null}
+                {errors.extra && touched.extra ? (<Text style={styles.error}>{errors.extra}</Text>) : null}
               </View>
-              <Button onPress={handleSubmit} title="Submit" />
+
+              <TouchableHighlight style={styles.btnSubmit} onPress={handleSubmit}><Text style={globalStyles.text}>Submit</Text></TouchableHighlight>
             </View>
           )}
         </Formik>
@@ -99,9 +105,18 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
+  btnSubmit: {
+    marginTop: 15,
+    alignItems: 'center',
+    padding: 15,
+    backgroundColor: '#4287f5',
+  }
 });
 
-const mapStateToProps = (state) => {};
-const mapDispatchToProps = () => {};
+const mapStateToProps = (state) => ({
+  results: state.AppReducer.results
+});
+
+const mapDispatchToProps = { addResult, addResultSuccess, addResultFail };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

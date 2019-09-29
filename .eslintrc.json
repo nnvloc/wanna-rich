@@ -16,6 +16,6 @@
     ],
     "rules": {
         "react/jsx-filename-extension": [0],
-        "no-use-before-define": [false],
+        "no-use-before-define": [false]
     }
 }

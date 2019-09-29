@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FlatList, View, Text } from 'react-native';
 
-export default class ResultListPage extends Component {
+class ResultListPage extends Component {
   constructor(props) {
     super(props);
   }
@@ -26,13 +27,15 @@ export default class ResultListPage extends Component {
   keyExtractor = (item, index) => item.date;
 
   render() {
+    const { results } = this.props;
+    console.log('results: ', results);
     return (
       <View style={styles.container}>
         <Text style={{ ...styles.title, ...styles.textBold }}>Results</Text>
         <FlatList
           style={{ flex: 1 }}
           renderItem={this.renderItem}
-          data={global.results}
+          data={results}
           keyExtractor={this.keyExtractor}
         />
       </View>
@@ -72,3 +75,11 @@ const styles = {
     fontSize: 24,
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    results: state.AppReducer.results,
+  };
+};
+
+export default connect(mapStateToProps, null)(ResultListPage);
