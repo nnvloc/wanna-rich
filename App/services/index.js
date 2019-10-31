@@ -3,7 +3,7 @@ import moment from 'moment';
 
 const dateFormat = 'DD-MM-YYYY';
 
-const APIURL = 'http://dae210dd.ngrok.io';
+const APIURL = '';
 const api = axios.create({
   baseURL: APIURL,
   timeout: 3000,
@@ -57,7 +57,7 @@ const summaryData = (data) => {
       let valCount = (result[v] || {}).valueCount || 0;
       result[v] = { value: v, ...(result[v] || {}), valueCount: ++valCount };
     });
-  });  let results = {};
+  });
 
   return Object.keys(result).map(key => result[key]);
 };
