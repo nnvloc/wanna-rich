@@ -4,7 +4,7 @@ const path = require('path');
 const server = jsonServer.create();
 const router = jsonServer.router(path.resolve(__dirname, './data.json'));
 const middlewares = jsonServer.defaults();
-const dataPath = './data.json';
+const dataPath = path.resolve(__dirname, './data.json');
 
 server.use(middlewares);
 
@@ -15,7 +15,7 @@ server.use(jsonServer.bodyParser);
 server.get('/', (req, res, next) => res.send('Hello world!'));
 
 server.get('/data', (req , res, next) => {
-  const data = JSON.parse(fs.readFileSync('./data.json'));
+  const data = JSON.parse(fs.readFileSync(dataPath));
   res.json(data);
 });
 
@@ -27,9 +27,9 @@ server.post('/result/add', (req, res, next) => {
     throw err;
   }
 
-  const data = JSON.parse(fs.readFileSync('./data.json'));
+  const data = JSON.parse(fs.readFileSync(dataPath));
   data[date] = { value, extra }
-  fs.writeFileSync('./data.json', JSON.stringify(data));
+  fs.writeFileSync(dataPath, JSON.stringify(data));
   res.json({ date, value, extra });
 });
 

@@ -19,7 +19,6 @@ class HomePage extends Component {
 
   addResult = (result) => {
     this.props.addResult(result);
-    console.log('result: ', result);
   }
 
   onSubmit = (values, { setSubmitting }) => {

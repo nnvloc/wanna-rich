@@ -19,11 +19,9 @@ const AppReducer = (state = initState, action) => {
       return { ...state }
     }
     case ADD_RESULT_SUCCESS: {
-      console.log('add result success');
       return { ...state };
     }
     case ADD_RESULT_FAILURE: {
-      console.log('add result fail: ', action.err);
       return { ...state };
     }
     default: {

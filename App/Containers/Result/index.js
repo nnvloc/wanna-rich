@@ -28,7 +28,6 @@ class ResultListPage extends Component {
 
   render() {
     const { results } = this.props;
-    console.log('results: ', results);
     return (
       <View style={styles.container}>
         <Text style={{ ...styles.title, ...styles.textBold }}>Results</Text>
