@@ -20,17 +20,21 @@ server.get('/data', (req , res, next) => {
 });
 
 server.post('/result/add', (req, res, next) => {
-  const { value, extra, date } = req.body;
-  if (!value || !extra || !date) {
-    const err = new Error(400);
-    err.message = 'Bad request';
-    throw err;
-  }
+  try {
+    const { value, extra, date } = req.body;
+    if (!value || !extra || !date) {
+      const err = new Error(400);
+      err.msg = 'Bad request.';
+      throw err;
+    }
 
-  const data = JSON.parse(fs.readFileSync(dataPath));
-  data[date] = { value, extra }
-  fs.writeFileSync(dataPath, JSON.stringify(data));
-  res.json({ date, value, extra });
+    const data = JSON.parse(fs.readFileSync(dataPath));
+    data[date] = { value, extra }
+    fs.writeFileSync(dataPath, JSON.stringify(data));
+    res.json({ date, value, extra });
+  } catch(err) {
+    res.json({ err: err.msg || 'Something went wrong!' });
+  }
 });
 
 server.use(router);

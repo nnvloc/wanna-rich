@@ -6,7 +6,8 @@ import {
 } from '../actions/app';
 
 const initState = {
-  results: {}
+  results: {},
+  err: null,
 }
 
 const AppReducer = (state = initState, action) => {
@@ -19,10 +20,10 @@ const AppReducer = (state = initState, action) => {
       return { ...state }
     }
     case ADD_RESULT_SUCCESS: {
-      return { ...state };
+      return { ...state, ...(action.payload || {}), err: null };
     }
     case ADD_RESULT_FAILURE: {
-      return { ...state };
+      return { ...state, };
     }
     default: {
       return { ...state };

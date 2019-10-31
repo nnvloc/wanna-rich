@@ -4,14 +4,22 @@ import moment from 'moment';
 const dateFormat = 'DD-MM-YYYY';
 
 const APIURL = 'http://dae210dd.ngrok.io';
+const api = axios.create({
+  baseURL: APIURL,
+  timeout: 3000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
-export const insertResult = async (result) => {
-  const newResult = await axios.post(`${APIURL}/result/add`);
-  return newResult;
+export const insertResult = async (data) => {
+  const { value, extra, date } = data;
+  const res = await api.post(`${APIURL}/result/add`, { value, extra, date });
+  return res.data || {};
 }
 
 export const getData = () => {
-  return new Promise((resolve, reject) => axios.get(`${APIURL}/data`)
+  return new Promise((resolve, reject) => api.get(`${APIURL}/data`)
     .then(results => resolve({...results.data}))
     .catch(err => reject(err))
   );

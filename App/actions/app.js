@@ -10,7 +10,7 @@ export const addResult = (payload) => ({
 
 export const addResultSuccess = (result) => ({
   type: ADD_RESULT_SUCCESS,
-  result,
+  payload: result,
 });
 
 export const addResultFail = (err) => ({

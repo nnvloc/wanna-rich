@@ -17,8 +17,17 @@ class HomePage extends Component {
     this.initialValues = { result: '', date: '', extra: '' };
   }
 
-  addResult = (result) => {
-    this.props.addResult(result);
+  addResult = async ({ result, date, extra }) => {
+    const value = result.split(', ').map(v => +v);
+
+    const res = await insertResult({ value, date, extra });
+    if (!res || res.err) {
+      this.props.addResultFail((res || {}).err);
+      alert((res || {}).err);
+    } else {
+      this.props.addResultSuccess(res.data);
+      alert('Add success!');
+    }
   }
 
   onSubmit = (values, { setSubmitting }) => {
@@ -113,7 +122,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  results: state.AppReducer.results
+  results: state.AppReducer.results,
 });
 
 const mapDispatchToProps = { addResult, addResultSuccess, addResultFail };
