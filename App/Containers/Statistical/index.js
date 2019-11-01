@@ -44,16 +44,9 @@ class StatisticalPage extends Component {
   renderItem = ({ item }) => (
     <View style={styles.resultBlock}>
       <View style={styles.resultDetail}>
-        <Text style={styles.label}>Value: </Text>
-        <Text style={{ ...styles.title, ...styles.resultValue, ...styles.textBold }}>{item.value}</Text>
-      </View>
-      <View style={styles.resultDetail}>
-        <Text style={styles.label}>Value count: </Text>
-        <Text style={{...styles.resultValue, ...styles.textBold}}>{item.valueCount}</Text>
-      </View>
-      <View style={styles.resultDetail}>
-        <Text style={styles.label}>Extra count: </Text>
-        <Text style={styles.resultValue}>{item.extraCount}</Text>
+        <Text style={{ ...styles.title, ...styles.resultValue, ...styles.textBold, ...{ backgroundColor: 'transparent', color: 'green' } }}>{item.value}</Text>
+        <Text style={{...styles.resultValue, ...styles.textBold, ...{ backgroundColor: 'transparent', color: '#02968d' } }}>{item.valueCount}</Text>
+        <Text style={{...styles.resultValue, ...{color: 'red'} }}>{item.extraCount}</Text>
       </View>
     </View>
   );
@@ -111,6 +104,11 @@ class StatisticalPage extends Component {
         </View>
         <View style={styles.filteredResults}>
           <Text style={{ ...styles.title, ...styles.textBold }}>Results</Text>
+          <View style={styles.resultDetail}>
+            <Text style={styles.label}>Value</Text>
+            <Text style={styles.label}>Value count</Text>
+            <Text style={styles.label}>Extra count</Text>
+          </View>
           <FlatList
             style={{ flex: 1 }}
             renderItem={this.renderItem}
@@ -145,29 +143,31 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: '#4287f5',
   },
-  searchBlock: {
-    paddingVertical: 15,
-  },
+  searchBlock: {},
   resultBlock: {
-    padding: 15,
+    paddingVertical: 5,
   },
   resultDetail: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   textBold: {
     fontWeight: 'bold',
   },
   label: {
     fontWeight: 'bold',
-    marginRight: 10,
-    fontSize: 24,
-    width: 150,
+    fontSize: 16,
+    flex: 0.3333333333333333,
+    textAlign: 'center',
   },
   resultValue: {
-    fontSize: 18,
+    fontSize: 14,
+    flexDirection: 'row',
+    flex: 0.3333333333333333,
+    textAlign: 'center'
   },
   filteredResults: {
     flex: 1,
