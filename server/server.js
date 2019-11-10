@@ -5,7 +5,7 @@ const server = jsonServer.create();
 const router = jsonServer.router(path.resolve(__dirname, './data.json'));
 const middlewares = jsonServer.defaults();
 const dataPath = path.resolve(__dirname, './data.json');
-
+const AppService = require('./service');
 server.use(middlewares);
 
 // To handle POST, PUT and PATCH you need to use a body-parser
@@ -14,12 +14,18 @@ server.use(jsonServer.bodyParser);
 
 server.get('/', (req, res, next) => res.send('Hello world!'));
 
-server.get('/data', (req , res, next) => {
-  const data = JSON.parse(fs.readFileSync(dataPath));
-  res.json(data);
+server.get('/data', async (req , res, next) => {
+  const data = await AppService.getResults(null);
+  const results = Object.values(data).reduce((result, item) => {
+    const obj = {};
+    const key = Object.keys(item)[0];
+    obj[key] = item[key];
+    return Object.assign({}, result, obj);
+  }, {});
+  res.json(results);
 });
 
-server.post('/result/add', (req, res, next) => {
+server.post('/result/add', async (req, res, next) => {
   try {
     const { value, extra, date } = req.body;
     if (!value || !extra || !date) {
@@ -28,11 +34,12 @@ server.post('/result/add', (req, res, next) => {
       throw err;
     }
 
-    const data = JSON.parse(fs.readFileSync(dataPath));
-    data[date] = { value, extra }
-    fs.writeFileSync(dataPath, JSON.stringify(data));
+    const postData = {};
+    postData[date] = { value, extra };
+    const addResponse = await AppService.addResult(postData);
     res.json({ date, value, extra });
   } catch(err) {
+    console.log('err: ', err);
     res.json({ err: err.msg || 'Something went wrong!' });
   }
 });
